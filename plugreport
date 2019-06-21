@@ -1,0 +1,17 @@
+#!/bin/bash
+
+die() {
+  echo >&2 "$2" 
+  exit 1
+}
+
+dir="$(dirname "$0")"
+[[ -x $dir/pluginfo ]] || die "no pluginfo script found"
+[[ -r $dir/plugpaths.config ]] || die "no plugpaths.config file found" 
+[[ -r $dir/plugfields.awk ]] || die "no plugfields.awk file found" 
+
+while read -r path; do
+  paths+=("${path%%#*}") # allows hash style comments in config file
+done <"$dir/plugpaths.config"
+
+"$dir/pluginfo" "${paths[@]}"

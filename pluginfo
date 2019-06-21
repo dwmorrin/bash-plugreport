@@ -1,0 +1,20 @@
+#!/bin/bash
+# $@ == path names to look for audio plug-ins
+
+# requires plugins.awk
+dir="$(dirname "$0")"
+[[ -r $dir/plugins.awk ]] || exit 1
+
+# header line
+echo identifier, signature, executable, version
+
+# generate records
+find "$@" -name "*.component" \
+    -or -name "*.plugin" \
+    -or -name "*.vst*" \
+    -or -name "*.aaxplugin"  \
+    2>/dev/null \
+| while read -r file; do
+    plutil -p "$file"/Contents/Info.plist \
+        | awk -v ext="${file##*.}" -f "$dir/plugfields.awk"
+done
