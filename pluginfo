@@ -3,7 +3,7 @@
 
 # requires plugins.awk
 dir="$(dirname "$0")"
-[[ -r $dir/plugins.awk ]] || exit 1
+[[ -r $dir/plugfields.awk ]] || exit 1
 
 # header line
 echo identifier, signature, executable, version
