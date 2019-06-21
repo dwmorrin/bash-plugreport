@@ -6,7 +6,7 @@ dir="$(dirname "$0")"
 [[ -r $dir/plugfields.awk ]] || exit 1
 
 # header line
-echo identifier, signature, executable, version
+echo identifier, signature, executable, ext, version
 
 # generate records
 find "$@" -name "*.component" \
