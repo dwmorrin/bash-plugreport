@@ -8,12 +8,12 @@ The file is just read by the builtin `read` if you want to test your file.
 
 ## features
 * comma separated fields; output can be directed to a .csv file
- * todo: allow user definied delimiter, or at least a `\t` option
+  * todo: allow user definied delimiter, or at least a `\t` option
 * each record contains these fields:
- * bundle identifier
- * developer signature
- * executable name
- * version
+  * bundle identifier
+  * developer signature
+  * executable name
+  * version
 
 ## caveats
 The fields reported were selected as the most reliable sources for indentifying the "make" and "model" of any given plug-in, however there is no universal system among plug-in developers, so these fields may not be satisfactory in all cases.
