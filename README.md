@@ -2,17 +2,20 @@
 bash scripts to generate a report of installed audio plug-ins on MacOS
 
 ## configuration
-`plugreport` reads file path names from a file named `plugpaths.config`.
-Put each path on a single line.  Use `#` for comments.
-The file is just read by the builtin `read` if you want to test your file.
+`plugreport` reads file path names and file name patterns from a file named `plugpaths.config`.
+`plugpaths.config` is **tab separated** so you can specify a path with spaces.
+Each line must contain at least one **path** and one **file name pattern**.
+The file name patterns are given to `find` as `-name pattern` e.g. `-name *.vst*` to grab all the vst plugins.
+You can have as many **tab separated** file name patterns as you want per line.
 
 ## features
 * comma separated fields; output can be directed to a .csv file
-  * todo: allow user defined delimiter, or at least a `\t` option
+  * todo: allow user defined output delimiter, or at least a `\t` option
 * each record contains these fields:
   * bundle identifier
   * developer signature
   * executable name
+  * file extension
   * version
 
 ## caveats

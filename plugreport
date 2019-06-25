@@ -5,13 +5,39 @@ die() {
   exit 1
 }
 
+report() {
+  if (($# < 2)); then
+    die "need at least 2 args to report, given $#"
+  fi
+
+  path="$1"
+  shift
+
+  local -a filetypes
+  filetypes+=(-name "$1") # requires at least one file type
+  shift
+  for filetype do
+    filetypes+=(-or -name "$filetype") # append additional file types
+  done
+
+  # do not quote path if using glob patterns in path name
+  # shellcheck disable=SC2086
+  find $path "${filetypes[@]}" 2>/dev/null \
+  | while read -r file; do
+      plutil -p "$file"/Contents/Info.plist \
+          | awk -v ext="${file##*.}" -f "$dir/plugfields.awk"
+  done
+}
+
 dir="$(dirname "$0")"
-[[ -x $dir/pluginfo ]] || die "no pluginfo script found"
+command -v awk &>/dev/null || die "required: awk, not found"
+command -v plutil &>/dev/null || die "required: plutil, not found"
 [[ -r $dir/plugpaths.config ]] || die "no plugpaths.config file found" 
 [[ -r $dir/plugfields.awk ]] || die "no plugfields.awk file found" 
 
-while read -r path; do
-  paths+=("${path%%#*}") # allows hash style comments in config file
-done <"$dir/plugpaths.config"
+# header line
+echo "identifier,signature,executable,ext,version"
 
-"$dir/pluginfo" "${paths[@]}"
+while IFS=$'\t' read -r -a config; do
+  report "${config[@]}" 
+done <"$dir/plugpaths.config"
